@@ -31,6 +31,7 @@ export default class Calendar extends Component {
   };
 
   static propTypes = {
+    controlsPosition: PropTypes.oneOf(['center', 'left', 'right']),
     currentMonth: PropTypes.any,
     customStyle: PropTypes.object,
     dayHeadings: PropTypes.array,
@@ -63,6 +64,7 @@ export default class Calendar extends Component {
   };
 
   static defaultProps = {
+    controlsPosition: 'center',
     customStyle: {},
     width: DEVICE_WIDTH,
     dayHeadings: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
@@ -304,32 +306,57 @@ export default class Calendar extends Component {
     );
   }
 
-  renderTopBar() {
+  renderControls(controlsPosition) {
     let localizedMonth = this.props.monthNames[this.state.currentMoment.month()];
+    const controlPrevious = (
+      <TouchableOpacity
+        key="controlPrevious"
+        style={[styles.controlButton, this.props.customStyle.controlButton]}
+        onPress={this.onPrev}
+      >
+        <Text style={[styles.controlButtonText, this.props.customStyle.controlButtonText]}>
+          {this.props.prevButtonText}
+        </Text>
+      </TouchableOpacity>
+    );
+    const controlNext = (
+      <TouchableOpacity
+        key="controlNext"
+        style={[styles.controlButton, this.props.customStyle.controlButton]}
+        onPress={this.onNext}
+      >
+        <Text style={[styles.controlButtonText, this.props.customStyle.controlButtonText]}>
+          {this.props.nextButtonText}
+        </Text>
+      </TouchableOpacity>
+    );
+    const controlTitle = (
+      <TouchableOpacity
+        key="controlTitle"
+        style={styles.title}
+        onPress={() => this.props.onTitlePress && this.props.onTitlePress()}
+      >
+        <Text style={[styles.titleText, this.props.customStyle.title]}>
+          {localizedMonth} {this.state.currentMoment.year()}
+        </Text>
+      </TouchableOpacity>
+    );
+
+    switch (controlsPosition) {
+      case 'left':
+        return [controlPrevious, controlNext, controlTitle];
+      case 'right':
+        return [controlTitle, controlPrevious, controlNext];
+      default:
+        return [controlPrevious, controlTitle, controlNext];
+    }
+  }
+
+  renderTopBar(controlsPosition) {
     return this.props.showControls
       ? (
         <View style={[styles.calendarControls, this.props.customStyle.calendarControls]}>
-          <TouchableOpacity
-             style={[styles.controlButton, this.props.customStyle.controlButton]}
-             onPress={this.onPrev}
-             >
-            <Text style={[styles.controlButtonText, this.props.customStyle.controlButtonText]}>
-              {this.props.prevButtonText}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.title} onPress={() => this.props.onTitlePress && this.props.onTitlePress()}>
-            <Text style={[styles.titleText, this.props.customStyle.title]}>
-              {localizedMonth} {this.state.currentMoment.year()}
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-             style={[styles.controlButton, this.props.customStyle.controlButton]}
-             onPress={this.onNext}
-             >
-            <Text style={[styles.controlButtonText, this.props.customStyle.controlButtonText]}>
-              {this.props.nextButtonText}
-            </Text>
-          </TouchableOpacity>
+          {this.renderControls(controlsPosition)}
         </View>
       )
     : (
@@ -349,7 +376,7 @@ export default class Calendar extends Component {
 
     return (
       <View style={[styles.calendarContainer, this.props.customStyle.calendarContainer]}>
-        {this.renderTopBar()}
+        {this.renderTopBar(this.props.controlsPosition)}
         {this.renderHeading(this.props.titleFormat)}
         {this.props.scrollEnabled ?
           <ScrollView
