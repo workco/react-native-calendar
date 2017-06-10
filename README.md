@@ -16,6 +16,8 @@ Portrait mode only
   dayHeadings={Array}               // Default: ['S', 'M', 'T', 'W', 'T', 'F', 'S']
   eventDates={['2015-07-01']}       // Optional array of moment() parseable dates that will show an event indicator
   events={[{date:'2015-07-01', ..}]}// Optional array of event objects with a date property and custom styles for the event indicator
+  invalidAfterDate={'2017-07-04'}   // Optional date to invalidate days after this date
+  invalidBeforeDate={'2017-07-04'}  // Optional date to invalidate days before this date
   monthNames={Array}                // Defaults to english names of months
   nextButtonText={'Next'}           // Text for next button. Default: 'Next'
   onDateSelect={(date) => this.onDateSelect(date)} // Callback after date selection
