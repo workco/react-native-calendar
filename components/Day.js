@@ -18,6 +18,7 @@ export default class Day extends Component {
     customStyle: PropTypes.object,
     filler: PropTypes.bool,
     event: PropTypes.object,
+    isInvalid: PropTypes.bool,
     isSelected: PropTypes.bool,
     isToday: PropTypes.bool,
     isWeekend: PropTypes.bool,
@@ -48,8 +49,12 @@ export default class Day extends Component {
   }
 
   dayTextStyle = (isWeekend, isSelected, isToday, event) => {
-    const { customStyle } = this.props;
+    const { customStyle, isInvalid } = this.props;
     const dayTextStyle = [styles.day, customStyle.day];
+    if (isInvalid) {
+      dayTextStyle.push(styles.invalidDayText, customStyle.invalidDayText);
+      return dayTextStyle;
+    }
 
     if (isToday && !isSelected) {
       dayTextStyle.push(styles.currentDayText, customStyle.currentDayText);
@@ -80,6 +85,7 @@ export default class Day extends Component {
     const {
       filler,
       event,
+      isInvalid,
       isWeekend,
       isSelected,
       isToday,
@@ -95,7 +101,7 @@ export default class Day extends Component {
         </TouchableWithoutFeedback>
       )
     : (
-      <TouchableOpacity onPress={this.props.onPress}>
+      <TouchableOpacity disabled={isInvalid} onPress={this.props.onPress}>
         <View style={this.dayButtonStyle(isWeekend, isSelected, isToday, event)}>
           <View style={this.dayCircleStyle(isWeekend, isSelected, isToday, event)}>
             <Text style={this.dayTextStyle(isWeekend, isSelected, isToday, event)}>{caption}</Text>

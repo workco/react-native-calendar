@@ -36,6 +36,8 @@ export default class Calendar extends Component {
     customStyle: PropTypes.object,
     dayHeadings: PropTypes.array,
     eventDates: PropTypes.array,
+    invalidAfterDate: PropTypes.any,
+    invalidBeforeDate: PropTypes.any,
     monthNames: PropTypes.array,
     nextButtonText: PropTypes.oneOfType([
       PropTypes.string,
@@ -223,6 +225,11 @@ export default class Calendar extends Component {
         weekRows = [],
         days = [];
 
+    const {
+      invalidAfterDate,
+      invalidBeforeDate
+    } = this.props;
+
     const
     startOfArgMoment = this.getStartMoment(calFormat, argMoment),
     selectedMoment = moment(this.state.selectedMoment),
@@ -238,17 +245,21 @@ export default class Calendar extends Component {
       const dayIndex = renderIndex - offset;
       const isoWeekday = (renderIndex + weekStart) % 7;
       const thisMoment = moment(startOfArgMoment).add(dayIndex, 'day');
+      const isInvalidBefore = invalidBeforeDate ? thisMoment.isBefore(invalidBeforeDate) : false;
+      const isInvalidAfter = invalidAfterDate ? thisMoment.isAfter(invalidAfterDate) : false;
+      const isInvalid = isInvalidBefore || isInvalidAfter;
 
       if (dayIndex >= 0 && dayIndex < argDaysCount) {
         days.push((
           <Day
+             isInvalid={isInvalid}
              startOfMonth={startOfArgMoment}
              isWeekend={isoWeekday === 0 || isoWeekday === 6}
              key={`${renderIndex}`}
-             onPress={() => {
+             onPress={!isInvalid ? () => {
                this.selectDate(thisMoment);
                this.props.onDateSelect && this.props.onDateSelect(thisMoment ? thisMoment.format(): null );
-            }}
+            } : undefined}
             caption={`${thisMoment.format('D')}`}
             isToday={todayMoment.format('YYYY-MM-DD') == thisMoment.format('YYYY-MM-DD')}
             isSelected={selectedMoment.isSame(thisMoment)}

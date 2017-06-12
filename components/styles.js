@@ -88,6 +88,9 @@ const styles = StyleSheet.create({
   currentDayText: {
     color: 'red',
   },
+  invalidDayText: {
+    opacity: 0.25,
+  },
   selectedDayCircle: {
     backgroundColor: 'black',
   },
