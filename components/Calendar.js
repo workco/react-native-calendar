@@ -259,7 +259,7 @@ export default class Calendar extends Component {
              onPress={!isInvalid ? () => {
                this.selectDate(thisMoment);
                this.props.onDateSelect && this.props.onDateSelect(thisMoment ? thisMoment.format(): null );
-            } : () => {}}
+            } : undefined}
             caption={`${thisMoment.format('D')}`}
             isToday={todayMoment.format('YYYY-MM-DD') == thisMoment.format('YYYY-MM-DD')}
             isSelected={selectedMoment.isSame(thisMoment)}

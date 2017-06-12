@@ -26,14 +26,6 @@ export default class Day extends Component {
     showEventIndicators: PropTypes.bool,
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (!this.props.isInvalid || !nextProps.isInvalid) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
   dayCircleStyle = (isWeekend, isSelected, isToday, event) => {
     const { customStyle } = this.props;
     const dayCircleStyle = [styles.dayCircleFiller, customStyle.dayCircleFiller];
