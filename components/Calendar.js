@@ -27,7 +27,7 @@ export default class Calendar extends Component {
   state = {
     currentMoment: moment(this.props.startDate),
     selectedMoment: moment(this.props.selectedDate),
-    rowHeight: null,
+    rowHeight: this.props.customStyle && this.props.customStyle.dayButton && this.props.customStyle.dayButton.height,
   };
 
   static propTypes = {
