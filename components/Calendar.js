@@ -27,7 +27,7 @@ export default class Calendar extends Component {
   state = {
     currentMoment: moment(this.props.startDate),
     selectedMoment: moment(this.props.selectedDate),
-    rowHeight: null,
+    rowHeight: this.props.customStyle && this.props.customStyle.dayButton && this.props.customStyle.dayButton.height,
   };
 
   static propTypes = {
@@ -383,7 +383,7 @@ export default class Calendar extends Component {
     const calendarDates = this.getStack(this.state.currentMoment);
     const eventDatesMap = this.prepareEventDates(this.props.eventDates, this.props.events);
     const numOfWeeks = this.props.calendarFormat === 'weekly' ? 1 :
-      getNumberOfWeeks(this.state.currentMonthMoment, this.props.weekStart);
+      getNumberOfWeeks(this.state.currentMoment, this.props.weekStart);
 
     return (
       <View style={[styles.calendarContainer, this.props.customStyle.calendarContainer]}>
